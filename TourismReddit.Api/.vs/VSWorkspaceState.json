@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Controllers",
+    "\\DbContext",
+    "\\Dtos"
+  ],
+  "SelectedNode": "\\Dtos\\CreatePostDtos,cs",
+  "PreviewInSolutionExplorer": false
+}
