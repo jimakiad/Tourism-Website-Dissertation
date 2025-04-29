@@ -1,3 +1,4 @@
+// Data/ApplicationDbContext.cs
 using Microsoft.EntityFrameworkCore;
 using TourismReddit.Api.Models;
 
@@ -11,57 +12,88 @@ public class ApplicationDbContext : DbContext
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Vote> Votes => Set<Vote>();
     public DbSet<Country> Countries => Set<Country>();
+    // --- Add DbSets ---
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Tag> Tags => Set<Tag>();
+    public DbSet<PostCategory> PostCategories => Set<PostCategory>();
+    public DbSet<PostTag> PostTags => Set<PostTag>();
+    // --- End Add DbSets ---
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Unique constraints
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.Username)
-            .IsUnique();
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.Email)
-            .IsUnique();
+        modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+        modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+        modelBuilder.Entity<Vote>().HasIndex(v => new { v.UserId, v.PostId }).IsUnique();
+        modelBuilder.Entity<Post>().HasOne(p => p.Author).WithMany(u => u.Posts).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Post>().HasOne(p => p.Country).WithMany().HasForeignKey(p => p.CountryId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Vote>().HasOne(v => v.User).WithMany(u => u.Votes).HasForeignKey(v => v.UserId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Vote>().HasOne(v => v.Post).WithMany(p => p.Votes).HasForeignKey(v => v.PostId).OnDelete(DeleteBehavior.Cascade);
 
-        // Unique constraint for votes (one vote per user per post)
-        modelBuilder.Entity<Vote>()
-            .HasIndex(v => new { v.UserId, v.PostId })
-            .IsUnique();
+        // --- Configure Join Tables ---
+        // PostCategory (Many-to-Many)
+        modelBuilder.Entity<PostCategory>()
+            .HasKey(pc => new { pc.PostId, pc.CategoryId }); // Composite primary key
 
-        // Relationships (EF Core conventions handle most, but explicit is fine)
-        modelBuilder.Entity<Post>()
-            .HasOne(p => p.Author)
-            .WithMany(u => u.Posts)
-            .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Or Restrict depending on rules
+        modelBuilder.Entity<PostCategory>()
+            .HasOne(pc => pc.Post)
+            .WithMany(p => p.PostCategories) // Link back to Post's collection
+            .HasForeignKey(pc => pc.PostId);
 
-        modelBuilder.Entity<Post>()
-            .HasOne(p => p.Country)
-            .WithMany() // Assuming country doesn't need list of posts
-            .HasForeignKey(p => p.CountryId)
-            .OnDelete(DeleteBehavior.Restrict); // Don't delete country if posts exist
+        modelBuilder.Entity<PostCategory>()
+            .HasOne(pc => pc.Category)
+            .WithMany(c => c.PostCategories) // Link back to Category's collection
+            .HasForeignKey(pc => pc.CategoryId);
 
-        modelBuilder.Entity<Vote>()
-            .HasOne(v => v.User)
-            .WithMany(u => u.Votes)
-            .HasForeignKey(v => v.UserId)
-            .OnDelete(DeleteBehavior.Restrict); // User deletion might need custom logic
+        // PostTag (Many-to-Many)
+        modelBuilder.Entity<PostTag>()
+            .HasKey(pt => new { pt.PostId, pt.TagId }); // Composite primary key
 
-        modelBuilder.Entity<Vote>()
-            .HasOne(v => v.Post)
-            .WithMany(p => p.Votes)
-            .HasForeignKey(v => v.PostId)
-            .OnDelete(DeleteBehavior.Cascade); // Delete votes if post is deleted
+        modelBuilder.Entity<PostTag>()
+            .HasOne(pt => pt.Post)
+            .WithMany(p => p.PostTags) // Link back to Post's collection
+            .HasForeignKey(pt => pt.PostId);
 
-        // Seed Data (Example)
+        modelBuilder.Entity<PostTag>()
+            .HasOne(pt => pt.Tag)
+            .WithMany(t => t.PostTags) // Link back to Tag's collection
+            .HasForeignKey(pt => pt.TagId);
+        // --- End Configure Join Tables ---
+
+        // --- Seed Data ---
         modelBuilder.Entity<Country>().HasData(
             new Country { Id = 1, Name = "United States", Code = "US" },
             new Country { Id = 2, Name = "Canada", Code = "CA" },
             new Country { Id = 3, Name = "Mexico", Code = "MX" },
             new Country { Id = 4, Name = "United Kingdom", Code = "GB" },
-            new Country { Id = 5, Name = "France", Code = "FR" }
-        // Add more as needed
+            new Country { Id = 5, Name = "France", Code = "FR" },
+            new Country { Id = 6, Name = "Japan", Code = "JP" },
+            new Country { Id = 7, Name = "Italy", Code = "IT" },
+            new Country { Id = 8, Name = "Greece", Code = "GR" }
         );
+
+        // Add some Categories
+        modelBuilder.Entity<Category>().HasData(
+            new Category { Id = 1, Name = "Recommendations" },
+            new Category { Id = 2, Name = "Questions" },
+            new Category { Id = 3, Name = "Travel Stories" },
+            new Category { Id = 4, Name = "Tips & Tricks" },
+            new Category { Id = 5, Name = "Food & Drink" }
+        );
+
+        // Add some Tags
+        modelBuilder.Entity<Tag>().HasData(
+           new Tag { Id = 1, Name = "Budget Travel" },
+           new Tag { Id = 2, Name = "Luxury Travel" },
+           new Tag { Id = 3, Name = "Adventure" },
+           new Tag { Id = 4, Name = "Relaxation" },
+           new Tag { Id = 5, Name = "Hiking" },
+           new Tag { Id = 6, Name = "Beaches" },
+           new Tag { Id = 7, Name = "City Break" },
+           new Tag { Id = 8, Name = "Culture" },
+           new Tag { Id = 9, Name = "Nightlife" }
+       );
+        // --- End Seed Data ---
     }
 }

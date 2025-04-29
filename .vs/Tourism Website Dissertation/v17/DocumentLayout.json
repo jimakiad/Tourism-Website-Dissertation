@@ -1,19 +1,271 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Dimitris Vakirtzis\\Desktop\\Tourism Website Dissertation\\",
-  "Documents": [],
+  "WorkspaceRootPath": "E:\\GitHub\\Tourism-Website-Dissertation\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\controllers\\postscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\controllers\\postscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\dtos\\postdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\dtos\\postdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\dtos\\posttag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\dtos\\posttag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\controllers\\tagscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\controllers\\tagscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\dtos\\tagdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\dtos\\tagdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\dtos\\categorydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\dtos\\categorydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\dtos\\createpostdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\dtos\\createpostdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\dbcontext\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\dbcontext\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\models\\post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\models\\post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\dtos\\postcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\dtos\\postcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\models\\tag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\models\\tag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\models\\country.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\models\\country.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|e:\\github\\tourism-website-dissertation\\tourismreddit.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F0F2CCC-0085-C273-A9D0-810E8AD5FD20}|TourismReddit.Api\\TourismReddit.Api.csproj|solutionrelative:tourismreddit.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
-      "VerticalTabListWidth": 426,
+      "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PostsController.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Controllers\\PostsController.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Controllers\\PostsController.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Controllers\\PostsController.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Controllers\\PostsController.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAAADoAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:11:16.165Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TagsController.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Controllers\\TagsController.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Controllers\\TagsController.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Controllers\\TagsController.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Controllers\\TagsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:10:58.218Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Controllers\\CategoriesController.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Controllers\\CategoriesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:10:30.172Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TagDto.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\TagDto.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Dtos\\TagDto.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\TagDto.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Dtos\\TagDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:10:05.958Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CategoryDto.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\CategoryDto.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Dtos\\CategoryDto.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\CategoryDto.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Dtos\\CategoryDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:09:52.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CreatePostDto.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\CreatePostDto.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Dtos\\CreatePostDto.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\CreatePostDto.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Dtos\\CreatePostDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:09:23.366Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PostDto.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\PostDto.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Dtos\\PostDto.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\PostDto.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Dtos\\PostDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:09:13.296Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\DbContext\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\DbContext\\ApplicationDbContext.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\DbContext\\ApplicationDbContext.cs",
+              "RelativeToolTip": "TourismReddit.Api\\DbContext\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:08:51.245Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Post.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Models\\Post.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Models\\Post.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Models\\Post.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Models\\Post.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:08:24.423Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PostTag.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\PostTag.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Dtos\\PostTag.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\PostTag.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Dtos\\PostTag.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:08:11.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "PostCategory.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\PostCategory.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Dtos\\PostCategory.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Dtos\\PostCategory.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Dtos\\PostCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:07:31.156Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Tag.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Models\\Tag.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Models\\Tag.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Models\\Tag.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Models\\Tag.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:06:56.965Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Country.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Models\\Country.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Models\\Country.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Models\\Country.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Models\\Country.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:06:30.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Category.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Models\\Category.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Models\\Category.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Models\\Category.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Models\\Category.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:06:07.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Program.cs",
+              "RelativeDocumentMoniker": "TourismReddit.Api\\Program.cs",
+              "ToolTip": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\Program.cs",
+              "RelativeToolTip": "TourismReddit.Api\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:04:03.942Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TourismReddit.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+309273ab3be61a1426282175b7e940246dc85b1c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+efd75f819f7920d7367542142d499461cc336b7a")]
 [assembly: System.Reflection.AssemblyProductAttribute("TourismReddit.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TourismReddit.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

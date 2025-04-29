@@ -56,6 +56,19 @@ export const votePost = (postId, direction) =>
 // Function to get the list of countries
 export const getCountries = () => apiClient.get('/Countries');
 
+// --- ADD FETCH CATEGORIES AND TAGS ---
+export const getCategories = () => apiClient.get('/categories');
+export const getTags = () => apiClient.get('/tags');
+// --- END ADD ---
+
+export const uploadPostImage = (postId, formData) => { // <-- Add export here
+  return apiClient.post(`/posts/${postId}/image`, formData, {
+      headers: {
+          'Content-Type': 'multipart/form-data',
+      }
+  });
+};
+
 // Simple Error Message Extractor
 // Tries to find a user-friendly error message from the backend response.
 export const getApiErrorMessage = (error) => {

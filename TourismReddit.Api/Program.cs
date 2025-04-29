@@ -1,11 +1,11 @@
-// Filename: Program.cs
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TourismReddit.Api.Data; // Using for ApplicationDbContext
 using Microsoft.OpenApi.Models;
-using System.Security.Claims; // Needed for AuthController helper, but generally good to have
+using System.Security.Claims;
+using Microsoft.Extensions.FileProviders; // For static files
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -115,6 +115,19 @@ using (var scope = app.Services.CreateScope())
     }
 }
 */
+
+// --- Add Static Files Middleware ---
+// Define the path to the uploads folder relative to the content root
+var uploadsFolderPath = Path.Combine(app.Environment.ContentRootPath, "uploads");
+// Ensure the directory exists (optional here, created on upload)
+// Directory.CreateDirectory(uploadsFolderPath);
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsFolderPath),
+    RequestPath = "/uploads" // The URL path clients will use (e.g., http://localhost:5019/uploads/...)
+});
+// --- End Add Static Files ---
 
 //For production, this is a dev build, so we don't need to use HTTPS redirection
 //app.UseHttpsRedirection();
