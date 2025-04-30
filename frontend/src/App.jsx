@@ -9,12 +9,15 @@ import {
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CountryPage from "./pages/CountryPage";
 
 // Import Page Components
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CreatePostPage from "./pages/CreatePostPage";
+import PostDetailPage from "./pages/PostDetailPage";
+import Footer from "./components/Footer";
 
 function App() {
 	return (
@@ -28,6 +31,8 @@ function App() {
 							<Route path="/" element={<HomePage />} />
 							<Route path="/login" element={<LoginPage />} />
 							<Route path="/register" element={<RegisterPage />} />
+							<Route path="/posts/:postId" element={<PostDetailPage />} />
+							<Route path="/country/:countryCode" element={<CountryPage />} />
 
 							{/* Protected Routes */}
 							<Route
@@ -43,9 +48,7 @@ function App() {
 							<Route path="*" element={<Navigate to="/" replace />} />
 						</Routes>
 					</main>
-					<footer className="text-center p-4 mt-6 text-xs text-gray-400 border-t border-gray-200">
-						Tourit Forum
-					</footer>
+					<Footer />
 				</div>
 			</Router>
 		</AuthProvider>

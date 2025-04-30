@@ -94,7 +94,8 @@ namespace TourismReddit.Api.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
                 // You can use JwtRegisteredClaimNames constants too
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("IsSubscribed", user.IsSubscribed.ToString().ToLowerInvariant())
             };
 
             var token = new JwtSecurityToken(

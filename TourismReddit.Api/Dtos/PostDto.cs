@@ -8,6 +8,7 @@ namespace TourismReddit.Api.Dtos
         public string Body { get; set; } = string.Empty;
         public string AuthorUsername { get; set; } = string.Empty;
         public string CountryName { get; set; } = string.Empty;
+        public string? CountryCode { get; set; }
         // --- Replace string with List<string> ---
         // public string Tags { get; set; } = string.Empty;
         // public string Categories { get; set; } = string.Empty;

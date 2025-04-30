@@ -42,6 +42,8 @@ public class Post
     public virtual ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
     // --- End Add Relationships ---
 
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
     [NotMapped]
     public int Score => Votes?.Any() == true ? Votes.Sum(v => v.VoteType) : 0;
 }

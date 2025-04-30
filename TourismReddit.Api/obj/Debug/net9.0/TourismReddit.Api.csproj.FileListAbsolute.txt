@@ -284,6 +284,14 @@ E:\Coding\Tourism Website Dissertation\TourismReddit.Api\obj\Debug\net9.0\refint
 E:\Coding\Tourism Website Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.pdb
 E:\Coding\Tourism Website Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.genruntimeconfig.cache
 E:\Coding\Tourism Website Dissertation\TourismReddit.Api\obj\Debug\net9.0\ref\TourismReddit.Api.dll
+E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.csproj.AssemblyReference.cache
+E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.GeneratedMSBuildEditorConfig.editorconfig
+E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.AssemblyInfoInputs.cache
+E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.AssemblyInfo.cs
+E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.csproj.CoreCompileInputs.cache
+E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.MvcApplicationPartsAssemblyInfo.cs
+E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.MvcApplicationPartsAssemblyInfo.cache
+E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.sourcelink.json
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\bin\Debug\net9.0\appsettings.Development.json
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\bin\Debug\net9.0\appsettings.json
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\bin\Debug\net9.0\TourismReddit.Api.staticwebassets.endpoints.json
@@ -404,13 +412,6 @@ E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\bin\Debug\net9.0\ru\Mic
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
-E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.csproj.AssemblyReference.cache
-E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.GeneratedMSBuildEditorConfig.editorconfig
-E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.AssemblyInfoInputs.cache
-E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.AssemblyInfo.cs
-E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.csproj.CoreCompileInputs.cache
-E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.MvcApplicationPartsAssemblyInfo.cs
-E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\TourismReddit.Api.MvcApplicationPartsAssemblyInfo.cache
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\scopedcss\bundle\TourismReddit.Api.styles.css
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\staticwebassets.build.json
 E:\GitHub\Tourism-Website-Dissertation\TourismReddit.Api\obj\Debug\net9.0\staticwebassets.development.json

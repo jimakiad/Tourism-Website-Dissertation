@@ -10,56 +10,76 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Post> Posts => Set<Post>();
-    public DbSet<Vote> Votes => Set<Vote>();
+    public DbSet<Vote> Votes => Set<Vote>(); // Post Votes
     public DbSet<Country> Countries => Set<Country>();
-    // --- Add DbSets ---
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Tag> Tags => Set<Tag>();
     public DbSet<PostCategory> PostCategories => Set<PostCategory>();
     public DbSet<PostTag> PostTags => Set<PostTag>();
-    // --- End Add DbSets ---
+    // --- Add Comment DbSets ---
+    public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<CommentVote> CommentVotes => Set<CommentVote>();
+    // --- End Add Comment DbSets ---
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        // --- Existing Configurations ---
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
-        modelBuilder.Entity<Vote>().HasIndex(v => new { v.UserId, v.PostId }).IsUnique();
+        modelBuilder.Entity<Vote>().HasIndex(v => new { v.UserId, v.PostId }).IsUnique(); // Post Vote unique constraint
         modelBuilder.Entity<Post>().HasOne(p => p.Author).WithMany(u => u.Posts).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<Post>().HasOne(p => p.Country).WithMany().HasForeignKey(p => p.CountryId).OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<Vote>().HasOne(v => v.User).WithMany(u => u.Votes).HasForeignKey(v => v.UserId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Vote>().HasOne(v => v.User).WithMany(u => u.Votes).HasForeignKey(v => v.UserId).OnDelete(DeleteBehavior.Restrict); // May need Cascade if User deleted?
         modelBuilder.Entity<Vote>().HasOne(v => v.Post).WithMany(p => p.Votes).HasForeignKey(v => v.PostId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<PostCategory>().HasKey(pc => new { pc.PostId, pc.CategoryId });
+        modelBuilder.Entity<PostCategory>().HasOne(pc => pc.Post).WithMany(p => p.PostCategories).HasForeignKey(pc => pc.PostId);
+        modelBuilder.Entity<PostCategory>().HasOne(pc => pc.Category).WithMany(c => c.PostCategories).HasForeignKey(pc => pc.CategoryId);
+        modelBuilder.Entity<PostTag>().HasKey(pt => new { pt.PostId, pt.TagId });
+        modelBuilder.Entity<PostTag>().HasOne(pt => pt.Post).WithMany(p => p.PostTags).HasForeignKey(pt => pt.PostId);
+        modelBuilder.Entity<PostTag>().HasOne(pt => pt.Tag).WithMany(t => t.PostTags).HasForeignKey(pt => pt.TagId);
+        // --- End Existing Configurations ---
 
-        // --- Configure Join Tables ---
-        // PostCategory (Many-to-Many)
-        modelBuilder.Entity<PostCategory>()
-            .HasKey(pc => new { pc.PostId, pc.CategoryId }); // Composite primary key
 
-        modelBuilder.Entity<PostCategory>()
-            .HasOne(pc => pc.Post)
-            .WithMany(p => p.PostCategories) // Link back to Post's collection
-            .HasForeignKey(pc => pc.PostId);
+        // --- Configure Comment ---
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Author)
+            .WithMany() // A User can have many comments, but maybe we don't need direct nav from User?
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Restrict); // Prevent deleting user if they have comments? Or Cascade?
 
-        modelBuilder.Entity<PostCategory>()
-            .HasOne(pc => pc.Category)
-            .WithMany(c => c.PostCategories) // Link back to Category's collection
-            .HasForeignKey(pc => pc.CategoryId);
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Post)
+            .WithMany() // A Post can have many comments, but maybe we don't need direct nav from Post? Define if needed later.
+            .HasForeignKey(c => c.PostId)
+            .OnDelete(DeleteBehavior.Cascade); // Delete comments if post is deleted
 
-        // PostTag (Many-to-Many)
-        modelBuilder.Entity<PostTag>()
-            .HasKey(pt => new { pt.PostId, pt.TagId }); // Composite primary key
+        // Configure self-referencing relationship for replies
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.ParentComment) // A comment has one parent (or null)
+            .WithMany(p => p.Replies)     // A parent can have many replies
+            .HasForeignKey(c => c.ParentCommentId) // Foreign key
+            .OnDelete(DeleteBehavior.Restrict); // Prevent deleting a comment if it has replies? Or Cascade? Careful with cascades here.
+                                                // --- End Configure Comment ---
 
-        modelBuilder.Entity<PostTag>()
-            .HasOne(pt => pt.Post)
-            .WithMany(p => p.PostTags) // Link back to Post's collection
-            .HasForeignKey(pt => pt.PostId);
 
-        modelBuilder.Entity<PostTag>()
-            .HasOne(pt => pt.Tag)
-            .WithMany(t => t.PostTags) // Link back to Tag's collection
-            .HasForeignKey(pt => pt.TagId);
-        // --- End Configure Join Tables ---
+        // --- Configure CommentVote ---
+        modelBuilder.Entity<CommentVote>()
+           .HasIndex(cv => new { cv.UserId, cv.CommentId }) // User can vote once per comment
+           .IsUnique();
+
+        modelBuilder.Entity<CommentVote>()
+           .HasOne(cv => cv.User)
+           .WithMany() // No direct nav needed from User to CommentVotes usually
+           .HasForeignKey(cv => cv.UserId)
+           .OnDelete(DeleteBehavior.Restrict); // Or Cascade?
+
+        modelBuilder.Entity<CommentVote>()
+            .HasOne(cv => cv.Comment)
+            .WithMany(c => c.CommentVotes) // Navigation from Comment to its votes
+            .HasForeignKey(cv => cv.CommentId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // --- Seed Data ---
         modelBuilder.Entity<Country>().HasData(

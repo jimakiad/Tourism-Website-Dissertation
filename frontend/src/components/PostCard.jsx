@@ -1,12 +1,11 @@
 // src/components/PostCard.jsx
 import React from "react";
 import VoteButtons from "./VoteButtons";
-// --- Import OpenLayers / rlayers ---
-import { RMap, ROSM, RLayerVector, RFeature } from "rlayers"; // Removed RPopup for preview
+import { Link } from "react-router-dom";
+import { RMap, ROSM, RLayerVector, RFeature } from "rlayers";
 import { Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
-// --- End Imports ---
 
 const previewContainerStyle = { height: "150px", width: "100%" };
 
@@ -49,18 +48,26 @@ const PostCard = ({ post }) => {
 				<VoteButtons postId={post.id} initialScore={post.score} />
 				<div className="p-3 flex-grow overflow-hidden">
 					{/* --- Metadata --- */}
-					<div className="text-xs text-gray-500 mb-1 flex flex-wrap items-center space-x-2">
-						<span className="font-medium text-blue-700 hover:underline cursor-pointer">
-							t/{post.countryName || "unknown"}
-						</span>
-						<span className="text-gray-300">•</span>
-						<span>Posted by u/{post.authorUsername || "anonymous"}</span>
-						<span>{formatDate(post.createdAt)}</span>
-					</div>
+					<div className="text-xs ... space-x-2">
+                        {/* --- Link the Country Name --- */}
+                        {post.countryCode ? (
+                            <Link to={`/country/${post.countryCode}`} className="font-medium text-blue-700 hover:underline cursor-pointer">
+                                t/{post.countryName || post.countryCode}
+                            </Link>
+                        ) : (
+                            <span className="font-medium text-gray-500">t/unknown</span>
+                        )}
+                        {/* --- End Link --- */}
+                        <span className="text-gray-300">•</span>
+                        <span>Posted by u/{post.authorUsername || 'anonymous'}</span>
+                        <span>{formatDate(post.createdAt)}</span>
+                    </div>
 					{/* --- Title --- */}
-					<h2 className="text-base sm:text-lg font-medium text-gray-800 mb-1 break-words">
-						{post.title}
-					</h2>
+					<Link to={`/posts/${post.id}`} className="block hover:text-blue-600">
+						<h2 className="text-base sm:text-lg font-medium text-gray-800 mb-1 break-words">
+							{post.title}
+						</h2>
+					</Link>
 					{/* --- Categories & Tags --- */}
 					<div className="mt-2 text-xs flex flex-wrap gap-1">
 						{post.categoryNames?.map((cat) => (

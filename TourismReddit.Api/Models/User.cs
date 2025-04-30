@@ -15,9 +15,10 @@ namespace TourismReddit.Api.Models // Make sure this namespace matches your proj
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+        public bool IsSubscribed { get; set; } = false;
         // Navigation properties
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
         public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
+        
     }
 }
