@@ -1,4 +1,3 @@
-// src/components/VoteButtons.jsx
 import React, { useState } from 'react';
 import { votePost, getApiErrorMessage } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';

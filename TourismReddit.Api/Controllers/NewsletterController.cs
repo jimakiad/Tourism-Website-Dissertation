@@ -1,9 +1,6 @@
-// Controllers/NewsletterController.cs
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using TourismReddit.Api.Data;
 
 namespace TourismReddit.Api.Controllers;
@@ -22,7 +19,6 @@ public class NewsletterController : ControllerBase
         _logger = logger;
     }
 
-    // Helper to get current user ID (could be moved to a base controller)
     private bool TryGetUserId(out int userId)
     {
         userId = 0;
@@ -36,7 +32,6 @@ public class NewsletterController : ControllerBase
         return false;
     }
 
-    // POST /api/newsletter/subscribe
     [HttpPost("subscribe")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -48,7 +43,7 @@ public class NewsletterController : ControllerBase
         var user = await _context.Users.FindAsync(userId);
         if (user == null) return NotFound("User not found.");
 
-        if (!user.IsSubscribed) // Only update if not already subscribed
+        if (!user.IsSubscribed)
         {
             user.IsSubscribed = true;
             _context.Users.Update(user);
@@ -61,7 +56,6 @@ public class NewsletterController : ControllerBase
         return Ok(new { message = "Subscription successful." });
     }
 
-    // POST /api/newsletter/unsubscribe
     [HttpPost("unsubscribe")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -73,7 +67,7 @@ public class NewsletterController : ControllerBase
         var user = await _context.Users.FindAsync(userId);
         if (user == null) return NotFound("User not found.");
 
-         if (user.IsSubscribed) // Only update if currently subscribed
+         if (user.IsSubscribed)
         {
             user.IsSubscribed = false;
             _context.Users.Update(user);
@@ -87,7 +81,6 @@ public class NewsletterController : ControllerBase
         return Ok(new { message = "Unsubscription successful." });
     }
 
-     // GET /api/newsletter/status (Optional: If needed separately from login token)
      [HttpGet("status")]
      [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
      [ProducesResponseType(StatusCodes.Status404NotFound)]

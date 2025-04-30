@@ -12,5 +12,13 @@ SELECT * FROM public."Countries"
 
 SELECT * FROM public."Categories"
 
+SELECT * FROM public."PostCategories"
+
+SELECT * FROM public."PostTags"
+
 SELECT * FROM public."Tags"
+
+SELECT * FROM public."Comments"
+
+SELECT * FROM public."CommentVotes"
 */

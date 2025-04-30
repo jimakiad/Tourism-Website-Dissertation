@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from "react";
 import {
 	BrowserRouter as Router,
@@ -11,13 +10,13 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CountryPage from "./pages/CountryPage";
 
-// Import Page Components
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CreatePostPage from "./pages/CreatePostPage";
 import PostDetailPage from "./pages/PostDetailPage";
 import Footer from "./components/Footer";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
 	return (
@@ -40,6 +39,16 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<CreatePostPage />
+									</ProtectedRoute>
+								}
+							/>
+
+							<Route
+								path="/profile" 
+								element={
+									<ProtectedRoute>
+										{" "}
+										<ProfilePage /> 
 									</ProtectedRoute>
 								}
 							/>

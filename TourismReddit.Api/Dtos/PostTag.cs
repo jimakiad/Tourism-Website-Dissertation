@@ -1,5 +1,4 @@
-﻿// Models/PostTag.cs
-namespace TourismReddit.Api.Models;
+﻿namespace TourismReddit.Api.Models;
 public class PostTag
 {
     public int PostId { get; set; }

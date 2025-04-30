@@ -1,5 +1,4 @@
-﻿// Controllers/TagsController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TourismReddit.Api.Data;
 using TourismReddit.Api.Dtos;

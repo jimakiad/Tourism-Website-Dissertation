@@ -16,15 +16,15 @@ const CreateCommentForm = ({
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (!body.trim()) return; // Don't submit empty comments
+		if (!body.trim()) return;
 		setIsLoading(true);
 		setError(null);
 		try {
 			const commentData = { body, parentCommentId };
 			const response = await createComment(postId, commentData);
-			setBody(""); // Clear the form
+			setBody("");
 			if (onCommentCreated) {
-				onCommentCreated(response.data); // Pass new comment data up
+				onCommentCreated(response.data);
 			}
 		} catch (err) {
 			setError(getApiErrorMessage(err));
@@ -49,11 +49,10 @@ const CreateCommentForm = ({
 				onChange={(e) => setBody(e.target.value)}
 				placeholder={parentCommentId ? "Write a reply..." : "Add a comment..."}
 				required
-				rows={parentCommentId ? 2 : 3} // Smaller for replies
+				rows={parentCommentId ? 2 : 3}
 				className="border rounded w-full py-1 px-2 text-gray-700 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400 mb-2"
 			/>
 			<div className="flex justify-end space-x-2">
-				{/* Conditionally render Cancel button only if onCancel prop is provided */}
 				{onCancel && (
 					<button
 						type="button"

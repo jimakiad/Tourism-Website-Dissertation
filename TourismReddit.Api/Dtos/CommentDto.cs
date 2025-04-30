@@ -1,18 +1,14 @@
-// Dtos/CommentDto.cs
 namespace TourismReddit.Api.Dtos;
 
 public class CommentDto
 {
     public int Id { get; set; }
     public string Body { get; set; } = string.Empty;
-    public int UserId { get; set; } // Useful for edit/delete checks later
+    public int UserId { get; set; }
     public string AuthorUsername { get; set; } = string.Empty;
     public int PostId { get; set; }
     public int? ParentCommentId { get; set; }
     public DateTime CreatedAt { get; set; }
     public int Score { get; set; }
-    // --- Add Replies for Nesting ---
-    public List<CommentDto> Replies { get; set; } = new List<CommentDto>(); // Nested replies
-    // --- End Add Replies ---
-    // You might add 'CurrentUserVote' later
+    public List<CommentDto> Replies { get; set; } = new List<CommentDto>();
 }

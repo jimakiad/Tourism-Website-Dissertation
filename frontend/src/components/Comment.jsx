@@ -1,8 +1,7 @@
-// src/components/Comment.jsx
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import CommentVoteButtons from "./CommentVoteButtons";
-import CreateCommentForm from "./CreateCommentForm"; // Create this next
+import CreateCommentForm from "./CreateCommentForm";
 
 const formatDate = (dateString) => {
 	if (!dateString) return "";
@@ -23,17 +22,13 @@ const formatDate = (dateString) => {
 const Comment = ({ comment, postId, onCommentCreated }) => {
 	const [showReplyForm, setShowReplyForm] = useState(false);
 
-	// When a reply is successfully created *for this comment*
 	const handleReplyCreated = (newReply) => {
-		setShowReplyForm(false); // Hide form after reply
-		onCommentCreated(newReply); // Notify parent page to potentially update list
+		setShowReplyForm(false);
+		onCommentCreated(newReply);
 	};
 
 	return (
 		<div className="ml-0 py-2 border-b border-gray-200 last:border-b-0">
-			{" "}
-			{/* Top level comment */}
-			{/* Comment Metadata */}
 			<div className="text-xs text-gray-500 mb-1 flex items-center">
 				<CommentVoteButtons
 					commentId={comment.id}
@@ -45,11 +40,9 @@ const Comment = ({ comment, postId, onCommentCreated }) => {
 					{formatDate(comment.createdAt)}
 				</time>
 			</div>
-			{/* Comment Body */}
 			<div className="text-sm text-gray-800 mb-2 prose prose-sm max-w-none">
 				<ReactMarkdown>{comment.body}</ReactMarkdown>
 			</div>
-			{/* Action Buttons (Reply) */}
 			<div className="text-xs">
 				<button
 					type="button"
@@ -58,20 +51,17 @@ const Comment = ({ comment, postId, onCommentCreated }) => {
 				>
 					Reply
 				</button>
-				{/* Add Edit/Delete later */}
 			</div>
-			{/* Reply Form (Conditional) */}
 			{showReplyForm && (
 				<div className="ml-4 mt-2">
 					<CreateCommentForm
 						postId={postId}
-						parentCommentId={comment.id} // Pass current comment ID as parent
+						parentCommentId={comment.id}
 						onCommentCreated={handleReplyCreated}
 						onCancel={() => setShowReplyForm(false)}
 					/>
 				</div>
 			)}
-			{/* Render Replies Recursively */}
 			{comment.replies && comment.replies.length > 0 && (
 				<div className="ml-4 pl-4 border-l-2 border-gray-200 mt-2">
 					{comment.replies.map((reply) => (
@@ -79,7 +69,7 @@ const Comment = ({ comment, postId, onCommentCreated }) => {
 							key={reply.id}
 							comment={reply}
 							postId={postId}
-							onCommentCreated={onCommentCreated} // Pass down handler
+							onCommentCreated={onCommentCreated}
 						/>
 					))}
 				</div>

@@ -1,5 +1,4 @@
-﻿// Dtos/CategoryDto.cs
-namespace TourismReddit.Api.Dtos;
+﻿namespace TourismReddit.Api.Dtos;
 public class CategoryDto
 {
     public int Id { get; set; }

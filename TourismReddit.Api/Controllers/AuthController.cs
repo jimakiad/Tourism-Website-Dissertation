@@ -89,10 +89,8 @@ namespace TourismReddit.Api.Controllers
 
             var claims = new[]
             {
-                // Standard claims for User ID (sub) and Name (unique_name) used by default identity
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                // You can use JwtRegisteredClaimNames constants too
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("IsSubscribed", user.IsSubscribed.ToString().ToLowerInvariant())
@@ -102,7 +100,7 @@ namespace TourismReddit.Api.Controllers
                 issuer: jwtIssuer,
                 audience: jwtAudience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1), // Adjust expiry as needed
+                expires: DateTime.UtcNow.AddHours(1), 
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

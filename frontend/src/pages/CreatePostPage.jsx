@@ -2,10 +2,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-// Import necessary API functions
 import {
 	createPost,
-	uploadPostImage, // Import the new function
+	uploadPostImage,
 	getCountries,
 	getCategories,
 	getTags,
@@ -14,7 +13,6 @@ import {
 import MapInput from "../components/MapInput";
 
 const CreatePostPage = () => {
-	// State for form fields
 	const [title, setTitle] = useState("");
 	const [body, setBody] = useState("");
 	const [countryId, setCountryId] = useState("");
@@ -29,12 +27,10 @@ const CreatePostPage = () => {
 	const [error, setError] = useState(null);
 	const navigate = useNavigate();
 
-	// Fetch countries, categories, tags when component mounts
 	useEffect(() => {
 		const fetchData = async () => {
-			setIsLoading(true); // Indicate loading starts
+			setIsLoading(true);
 			try {
-				// Use Promise.all to fetch concurrently
 				const [countriesRes, categoriesRes, tagsRes] = await Promise.all([
 					getCountries(),
 					getCategories(),
@@ -47,13 +43,12 @@ const CreatePostPage = () => {
 				setError("Could not load data needed for the form.");
 				console.error("Fetch error:", err);
 			} finally {
-				setIsLoading(false); // Indicate loading finished
+				setIsLoading(false);
 			}
 		};
 		fetchData();
-	}, []); // Empty array means run only once on mount
+	}, []);
 
-	// Handler for category checkbox changes
 	const handleCategoryChange = (event) => {
 		const categoryId = Number.parseInt(event.target.value, 10);
 		if (event.target.checked) {
@@ -63,7 +58,6 @@ const CreatePostPage = () => {
 		}
 	};
 
-	// Handler for tag checkbox changes
 	const handleTagChange = (event) => {
 		const tagId = Number.parseInt(event.target.value, 10);
 		if (event.target.checked) {
@@ -73,23 +67,20 @@ const CreatePostPage = () => {
 		}
 	};
 
-	// Handler for map coordinate changes (passed to MapInput)
 	const handlePositionChange = useCallback((newCoords) => {
 		console.log("CreatePostPage: handlePositionChange called with:", newCoords);
-		setCoordinates(newCoords); // Update state in parent
+		setCoordinates(newCoords);
 	}, []);
 
-	// Handler for image file selection
 	const handleImageChange = (event) => {
 		if (event.target?.files?.[0]) {
 			setImageFile(event.target.files[0]);
-			setError(null); // Clear error if a file is selected
+			setError(null);
 		} else {
 			setImageFile(null);
 		}
 	};
 
-	// Handler for form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (countryId === "") {
@@ -102,7 +93,6 @@ const CreatePostPage = () => {
 		let newPostId = null;
 
 		try {
-			// 1. Prepare core post data
 			const postData = {
 				title,
 				body,
@@ -113,41 +103,34 @@ const CreatePostPage = () => {
 				longitude: coordinates?.longitude,
 			};
 
-			// 2. Create the post
 			const response = await createPost(postData);
 			newPostId = response.data.id;
 			console.log(`Post created successfully with ID: ${newPostId}`);
 
-			// 3. If post created AND image selected, UPLOAD image
 			if (imageFile && newPostId) {
 				console.log(`Attempting to upload image for post ${newPostId}...`);
 				const formData = new FormData();
-				formData.append("imageFile", imageFile); // Key matches backend param
+				formData.append("imageFile", imageFile);
 
 				try {
-					// ----- Call the dedicated upload function -----
 					const uploadResponse = await uploadPostImage(newPostId, formData);
 					console.log("Image upload successful:", uploadResponse.data);
 				} catch (uploadError) {
 					console.error("Image upload failed:", uploadError);
-					// Set error but proceed with navigation
 					setError(
 						`Post created, but image upload failed: ${getApiErrorMessage(uploadError)}`,
 					);
 				}
 			}
 
-			// 4. Navigate home
 			navigate("/");
 		} catch (err) {
 			console.error("Create post error:", err);
 			setError(getApiErrorMessage(err));
-			setIsLoading(false); // Stop loading ONLY if post creation failed
+			setIsLoading(false);
 		}
 	};
-	// --- END UPDATED handleSubmit ---
 
-	// Render the form JSX
 	return (
 		<div className="container mx-auto max-w-2xl p-4 pt-6">
 			<div className="bg-white p-6 rounded border border-gray-300 shadow-sm">
@@ -155,14 +138,12 @@ const CreatePostPage = () => {
 					Create a new post
 				</h2>
 				<form onSubmit={handleSubmit}>
-					{/* Display Error Messages */}
 					{error && (
 						<p className="bg-red-100 text-red-600 p-2 rounded mb-4 text-xs">
 							{error}
 						</p>
 					)}
 
-					{/* Title Input */}
 					<div className="mb-4">
 						<input
 							type="text"
@@ -175,7 +156,6 @@ const CreatePostPage = () => {
 						/>
 					</div>
 
-					{/* Country Select */}
 					<div className="mb-4">
 						<label
 							className="block text-gray-700 text-xs font-bold mb-1"
@@ -201,7 +181,6 @@ const CreatePostPage = () => {
 						</select>
 					</div>
 
-					{/* Categories Checkboxes */}
 					<div className="mb-4">
 						<label
 							htmlFor="categories-group"
@@ -235,7 +214,6 @@ const CreatePostPage = () => {
 						</div>
 					</div>
 
-					{/* Tags Checkboxes */}
 					<div className="mb-4">
 						<label
 							htmlFor="tags-group"
@@ -269,7 +247,6 @@ const CreatePostPage = () => {
 						</div>
 					</div>
 
-					{/* Map Input */}
 					<div className="mb-4">
 						<label
 							htmlFor="map-input"
@@ -277,11 +254,9 @@ const CreatePostPage = () => {
 						>
 							Location (Optional)
 						</label>
-						{/* Render MapInput and pass the handler */}
 						<MapInput id="map-input" onPositionChange={handlePositionChange} />
 					</div>
 
-					{/* Image Input */}
 					<div className="mb-4">
 						<label
 							className="block text-gray-700 text-xs font-bold mb-2"
@@ -296,7 +271,6 @@ const CreatePostPage = () => {
 							accept=".jpg,.jpeg,.png,.webp"
 							className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
 						/>
-						{/* Show selected filename */}
 						{imageFile && (
 							<p className="text-xs text-gray-600 mt-1">
 								Selected: {imageFile.name}
@@ -304,7 +278,6 @@ const CreatePostPage = () => {
 						)}
 					</div>
 
-					{/* Body Textarea */}
 					<div className="mb-4">
 						<label
 							className="block text-gray-700 text-xs font-bold mb-1"
@@ -323,20 +296,17 @@ const CreatePostPage = () => {
 						/>
 					</div>
 
-					{/* Markdown Preview */}
 					<div className="mb-5 p-3 border rounded bg-gray-50 max-h-60 overflow-y-auto">
 						<h4 className="text-xs font-semibold text-gray-500 mb-2">
 							Preview:
 						</h4>
 						<div className="prose prose-sm max-w-none">
-							{/* Render markdown preview */}
 							<ReactMarkdown>
 								{body || "*Your post content will preview here.*"}
 							</ReactMarkdown>
 						</div>
 					</div>
 
-					{/* Submit Button */}
 					<div className="flex justify-end">
 						<button
 							type="submit"
@@ -351,4 +321,4 @@ const CreatePostPage = () => {
 		</div>
 	);
 };
-export default CreatePostPage; // Export the component
+export default CreatePostPage;

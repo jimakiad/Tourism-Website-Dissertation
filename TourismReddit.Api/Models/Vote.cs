@@ -1,23 +1,21 @@
-// Filename: Models/Vote.cs
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TourismReddit.Api.Models // Ensure namespace matches
+namespace TourismReddit.Api.Models 
 {
     public class Vote
     {
         public int Id { get; set; }
         [Required]
-        public int UserId { get; set; } // FK
+        public int UserId { get; set; }
         [Required]
-        public int PostId { get; set; } // FK
+        public int PostId { get; set; }
         [Required]
-        public int VoteType { get; set; } // 1 for like, -1 for dislike
+        public int VoteType { get; set; }
 
-        // Navigation properties
         [ForeignKey("UserId")]
-        public virtual User? User { get; set; } // Nullable reference type enabled? Use User? otherwise User
+        public virtual User? User { get; set; } 
         [ForeignKey("PostId")]
-        public virtual Post? Post { get; set; } // Nullable reference type enabled? Use Post? otherwise Post
+        public virtual Post? Post { get; set; } 
     }
 }

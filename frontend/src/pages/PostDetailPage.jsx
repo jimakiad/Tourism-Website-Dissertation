@@ -1,6 +1,5 @@
-// src/pages/PostDetailPage.jsx
 import React, { useState, useEffect, useCallback } from "react";
-import { useParams, Link } from "react-router-dom"; // useParams to get postId from URL
+import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import {
 	getPostById,
@@ -8,29 +7,27 @@ import {
 	getApiErrorMessage,
 } from "../services/api";
 import VoteButtons from "../components/VoteButtons";
-import Comment from "../components/Comment"; // Import Comment component
-import CreateCommentForm from "../components/CreateCommentForm"; // Import Form
-import { RMap, ROSM, RLayerVector, RFeature } from "rlayers"; // OpenLayers for preview
+import Comment from "../components/Comment"; 
+import CreateCommentForm from "../components/CreateCommentForm"; 
+import { RMap, ROSM, RLayerVector, RFeature } from "rlayers"; 
 import { Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
 
 const formatDate = (dateString) => {
-	/* ... same as in PostCard ... */
+
 };
-const IMAGE_BASE_URL = "http://localhost:5019"; // Ensure this matches backend
-const previewContainerStyle = { height: "250px", width: "100%" }; // Slightly larger preview
+const IMAGE_BASE_URL = "http://localhost:5019";
+const previewContainerStyle = { height: "250px", width: "100%" };
 
 const PostDetailPage = () => {
-	const { postId } = useParams(); // Get postId from the URL parameter
+	const { postId } = useParams();
 	const [post, setPost] = useState(null);
 	const [comments, setComments] = useState([]);
 	const [isLoadingPost, setIsLoadingPost] = useState(true);
 	const [isLoadingComments, setIsLoadingComments] = useState(true);
 	const [postError, setPostError] = useState(null);
 	const [commentsError, setCommentsError] = useState(null);
-
-	// Fetch Post Data
 	const fetchPost = useCallback(async () => {
 		if (!postId) return;
 		setIsLoadingPost(true);
@@ -45,40 +42,30 @@ const PostDetailPage = () => {
 		}
 	}, [postId]);
 
-	// Fetch Comments Data
 	const fetchComments = useCallback(async () => {
 		if (!postId) return;
 		setIsLoadingComments(true);
 		setCommentsError(null);
 		try {
-			// Use the function that reconstructs hierarchy
 			const response = await getCommentsForPost(postId);
-			setComments(response.data); // Expects root comments with nested replies
+			setComments(response.data); 
 		} catch (err) {
 			setCommentsError(getApiErrorMessage(err));
 		} finally {
 			setIsLoadingComments(false);
 		}
 	}, [postId]);
-
-	// Initial data fetch
 	useEffect(() => {
 		fetchPost();
 		fetchComments();
-	}, [fetchPost, fetchComments]); // Depend on the memoized fetch functions
-
-	// Callback for when a new comment/reply is created
-	// Refetches all comments to get the updated structure simply
+	}, [fetchPost, fetchComments]);
 	const handleCommentCreated = useCallback(
 		(newComment) => {
 			console.log("New comment created, refetching comments...", newComment);
-			fetchComments(); // Refetch the whole comment tree
-			// More advanced: insert the new comment into the local state directly
+			fetchComments(); 
 		},
 		[fetchComments],
 	);
-
-	// --- Rendering Logic ---
 	if (isLoadingPost) {
 		return <p className="text-center text-gray-500 py-10">Loading post...</p>;
 	}
@@ -92,8 +79,6 @@ const PostDetailPage = () => {
 	if (!post) {
 		return <p className="text-center text-gray-500 py-10">Post not found.</p>;
 	}
-
-	// Prep map data if location exists
 	const hasLocation = post.latitude != null && post.longitude != null;
 	const mapPositionCoords = hasLocation
 		? fromLonLat([post.longitude, post.latitude])
@@ -104,7 +89,6 @@ const PostDetailPage = () => {
 
 	return (
 		<div className="bg-white rounded border border-gray-300 shadow-sm my-4 overflow-hidden">
-			{/* Optional Post Image */}
 			{fullImageUrl && (
 				<img
 					src={fullImageUrl}
@@ -115,16 +99,11 @@ const PostDetailPage = () => {
 
 			<div className="flex p-0">
 				{" "}
-				{/* No padding on flex container */}
-				{/* Post Vote Buttons */}
 				<div className="pt-3 pl-1">
 					{" "}
-					{/* Add padding here */}
 					<VoteButtons postId={post.id} initialScore={post.score} />
 				</div>
-				{/* Post Content Area */}
 				<div className="p-4 flex-grow overflow-hidden">
-					{/* Metadata */}
 					<div className="text-xs text-gray-500 mb-2 flex flex-wrap items-center space-x-2">
 						<span className="font-medium text-blue-700 hover:underline cursor-pointer">
 							{" "}
@@ -134,11 +113,9 @@ const PostDetailPage = () => {
 						<span>Posted by u/{post.authorUsername || "anonymous"}</span>
 						<span>{formatDate(post.createdAt)}</span>
 					</div>
-					{/* Title */}
 					<h1 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3 break-words">
 						{post.title}
 					</h1>
-					{/* Categories & Tags */}
 					<div className="mb-4 text-xs flex flex-wrap gap-1">
 						{post.categoryNames?.map((cat) => (
 							<span
@@ -157,14 +134,11 @@ const PostDetailPage = () => {
 							</span>
 						))}
 					</div>
-					{/* Post Body (Markdown) */}
 					<div className="prose prose-sm max-w-none text-gray-800">
 						<ReactMarkdown>{post.body}</ReactMarkdown>
 					</div>
 				</div>
 			</div>
-
-			{/* Optional Map Display for Post */}
 			{hasLocation && mapPositionCoords && (
 				<div
 					className="border-t border-gray-200 mt-4"
@@ -182,22 +156,16 @@ const PostDetailPage = () => {
 					</RMap>
 				</div>
 			)}
-
-			{/* Comment Section */}
 			<div className="border-t border-gray-300 mt-4 p-4">
 				<h3 className="text-base font-semibold mb-3 text-gray-700">
 					Comments ({isLoadingComments ? "..." : comments.length})
 				</h3>
-
-				{/* Form to create top-level comment */}
 				<div className="mb-6">
 					<CreateCommentForm
-						postId={Number(postId)} // Ensure postId is number
+						postId={Number(postId)} 
 						onCommentCreated={handleCommentCreated}
 					/>
 				</div>
-
-				{/* Display Comments */}
 				{isLoadingComments && (
 					<p className="text-sm text-gray-500">Loading comments...</p>
 				)}
@@ -216,7 +184,7 @@ const PostDetailPage = () => {
 								key={comment.id}
 								comment={comment}
 								postId={Number(postId)}
-								onCommentCreated={handleCommentCreated} // Pass down for replies
+								onCommentCreated={handleCommentCreated}
 							/>
 						))}
 					</div>
