@@ -149,6 +149,7 @@ public class UsersController : ControllerBase
                  UserId = c.UserId ?? 0, 
                  AuthorUsername = "[My Comment]", 
                  PostId = c.PostId,
+                 PostTitle = c.Post != null ? (c.Post.Title ?? "[REMOVED]") : "[REMOVED]",
                  ParentCommentId = c.ParentCommentId,
                  CreatedAt = c.CreatedAt,
                  Score = c.CommentVotes.Any() ? c.CommentVotes.Sum(v => v.VoteType) : 0,

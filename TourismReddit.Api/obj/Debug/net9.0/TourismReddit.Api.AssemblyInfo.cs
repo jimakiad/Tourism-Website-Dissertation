@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TourismReddit.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e49c16e240ae6ef92b538f750ea6e98037392922")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a6faa4b873ebda33634d8a0d63f99d176f069b2d")]
 [assembly: System.Reflection.AssemblyProductAttribute("TourismReddit.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TourismReddit.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

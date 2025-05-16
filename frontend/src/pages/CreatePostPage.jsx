@@ -145,6 +145,12 @@ const CreatePostPage = () => {
 					)}
 
 					<div className="mb-4">
+						<label
+							className="block text-gray-700 text-xs font-bold mb-1"
+							htmlFor="title"
+						>
+							Title
+						</label>
 						<input
 							type="text"
 							placeholder="Post Title"
@@ -186,7 +192,7 @@ const CreatePostPage = () => {
 							htmlFor="categories-group"
 							className="block text-gray-700 text-xs font-bold mb-2"
 						>
-							Categories
+							Categories (Optional)
 						</label>
 						<div
 							id="categories-group"
@@ -262,7 +268,7 @@ const CreatePostPage = () => {
 							className="block text-gray-700 text-xs font-bold mb-2"
 							htmlFor="imageFile"
 						>
-							Upload Image (Optional - Not Uploaded Yet)
+							Upload Image (Optional)
 						</label>
 						<input
 							type="file"

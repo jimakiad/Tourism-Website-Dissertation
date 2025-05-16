@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1VjX3+9zEFA=",
+  "dgSpecHash": "ddi6DoXSvB8=",
   "success": true,
-  "projectFilePath": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\TourismReddit.Api.csproj",
+  "projectFilePath": "E:\\GitHub\\Tourism-Website-Dissertation\\tourismreddit.api\\TourismReddit.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dimitris Vakirtzis\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Dimitris Vakirtzis\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

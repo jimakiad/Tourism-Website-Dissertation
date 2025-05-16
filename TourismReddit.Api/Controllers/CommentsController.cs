@@ -52,14 +52,16 @@ namespace TourismReddit.Api.Controllers
                 .Where(c => c.PostId == postId)
                 .Include(c => c.Author)
                 .Include(c => c.CommentVotes)
+                .Include(c => c.Post)
                 .OrderBy(c => c.CreatedAt)
                 .Select(c => new CommentDto
                 {
                     Id = c.Id,
                     Body = c.Body ?? "[REMOVED]",
                     UserId = c.UserId ?? 0,
-                    AuthorUsername = c.Author != null ? c.Author.Username : "Unknown",
+                    AuthorUsername = c.Body == "[REMOVED]" ? "[REDACTED]" : (c.Author != null ? c.Author.Username : "Unknown"),
                     PostId = c.PostId,
+                    PostTitle = c.Post != null ? (c.Post.Title ?? "[REMOVED]") : "[REMOVED]",
                     ParentCommentId = c.ParentCommentId,
                     CreatedAt = c.CreatedAt,
                     Score = c.CommentVotes.Any() ? c.CommentVotes.Sum(v => v.VoteType) : 0,
@@ -162,9 +164,9 @@ namespace TourismReddit.Api.Controllers
                 return Forbid();
             }
 
-            comment.IsDeleted = true;
+            // comment.IsDeleted = true;
             comment.Body = "[REMOVED]";
-            comment.UserId = null;
+            // Do not set comment.UserId = null; UserId is required by the database
 
             _context.Comments.Update(comment);
             await _context.SaveChangesAsync();

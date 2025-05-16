@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\TourismReddit.Api.csproj": {}
+    "E:\\GitHub\\Tourism-Website-Dissertation\\tourismreddit.api\\TourismReddit.Api.csproj": {}
   },
   "projects": {
-    "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\TourismReddit.Api.csproj": {
+    "E:\\GitHub\\Tourism-Website-Dissertation\\tourismreddit.api\\TourismReddit.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\TourismReddit.Api.csproj",
+        "projectUniqueName": "E:\\GitHub\\Tourism-Website-Dissertation\\tourismreddit.api\\TourismReddit.Api.csproj",
         "projectName": "TourismReddit.Api",
-        "projectPath": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\TourismReddit.Api.csproj",
+        "projectPath": "E:\\GitHub\\Tourism-Website-Dissertation\\tourismreddit.api\\TourismReddit.Api.csproj",
         "packagesPath": "C:\\Users\\Dimitris Vakirtzis\\.nuget\\packages\\",
-        "outputPath": "E:\\GitHub\\Tourism-Website-Dissertation\\TourismReddit.Api\\obj\\",
+        "outputPath": "E:\\GitHub\\Tourism-Website-Dissertation\\tourismreddit.api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

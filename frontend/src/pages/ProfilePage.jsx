@@ -12,7 +12,7 @@ import {
 } from "../services/api";
 import PostCard from "../components/PostCard";
 
-const UserComment = ({ comment, onDelete }) => {
+const UserComment = ({ comment, onDelete, onPostClick }) => {
 	const formatDate = (dateString) => {
 		if (!dateString) return "";
 		const options = {
@@ -36,7 +36,29 @@ const UserComment = ({ comment, onDelete }) => {
 			className={`text-xs p-3 border-b last:border-b-0 ${isRedacted ? "bg-gray-100" : "bg-white hover:bg-gray-50"}`}
 		>
 			<p className="text-gray-600 mb-1">
-				{isRedacted ? "Comment Redacted" : `Comment on post ${comment.postId}`}
+				{isRedacted ? (
+					<>
+						Comment Redacted on post: {" "}
+						<button
+							className="text-blue-600 hover:underline cursor-pointer p-0 m-0 bg-transparent border-none inline"
+							onClick={() => onPostClick(comment.postId)}
+							type="button"
+						>
+							{comment.postTitle || `#${comment.postId}`}
+						</button>
+					</>
+				) : (
+					<>
+						Comment on post: {" "}
+						<button
+							className="text-blue-600 hover:underline cursor-pointer p-0 m-0 bg-transparent border-none inline"
+							onClick={() => onPostClick(comment.postId)}
+							type="button"
+						>
+							{comment.postTitle || `#${comment.postId}`}
+						</button>
+					</>
+				)}
 				<span className="mx-1">•</span> {formatDate(comment.createdAt)}
 				{!isRedacted && <span className="mx-1">•</span>}
 				{!isRedacted && `Score: ${comment.score}`}
@@ -293,6 +315,7 @@ const ProfilePage = () => {
 							key={comment.id}
 							comment={comment}
 							onDelete={handleDeleteComment}
+							onPostClick={(postId) => navigate(`/posts/${postId}`)}
 						/>
 					))}
 				</div>

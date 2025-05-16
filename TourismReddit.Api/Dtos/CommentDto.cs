@@ -7,6 +7,7 @@ public class CommentDto
     public int UserId { get; set; }
     public string AuthorUsername { get; set; } = string.Empty;
     public int PostId { get; set; }
+    public string? PostTitle { get; set; }
     public int? ParentCommentId { get; set; }
     public DateTime CreatedAt { get; set; }
     public int Score { get; set; }
