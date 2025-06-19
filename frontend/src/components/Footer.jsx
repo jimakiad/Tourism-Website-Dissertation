@@ -1,86 +1,74 @@
-// src/components/Footer.jsx
-import React, { useState, useEffect } from "react"; // Add useEffect
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import {
 	subscribeNewsletter,
 	unsubscribeNewsletter,
-	getNewsletterStatus, // Import the status check function
+	getNewsletterStatus,
 	getApiErrorMessage,
 } from "../services/api";
 
 const Footer = () => {
-	const { isAuthenticated } = useAuth(); // Only need isAuthenticated from context now
-	// Local state for the button's display and API calls
-	const [isSubscribedView, setIsSubscribedView] = useState(false); // Local view state
-	const [isLoadingStatus, setIsLoadingStatus] = useState(false); // Loading status fetch
-	const [isLoadingToggle, setIsLoadingToggle] = useState(false); // Loading toggle action
+	const { isAuthenticated } = useAuth();
+	const [isSubscribedView, setIsSubscribedView] = useState(false);
+	const [isLoadingStatus, setIsLoadingStatus] = useState(false);
+	const [isLoadingToggle, setIsLoadingToggle] = useState(false);
 	const [subError, setSubError] = useState(null);
 	const [subMessage, setSubMessage] = useState(null);
 
-	// --- Effect to fetch status on mount/auth change ---
 	useEffect(() => {
-		// Only fetch if user is authenticated
 		if (isAuthenticated) {
 			console.log(
 				"Footer: User is authenticated, fetching newsletter status...",
 			);
-			setIsLoadingStatus(true); // Indicate loading status
-			setSubError(null); // Clear previous errors
+			setIsLoadingStatus(true);
+			setSubError(null);
 			getNewsletterStatus()
 				.then((response) => {
 					console.log("Footer: Received status:", response.data.isSubscribed);
-					setIsSubscribedView(response.data.isSubscribed); // Update local view state
+					setIsSubscribedView(response.data.isSubscribed);
 				})
 				.catch((err) => {
 					console.error("Footer: Error fetching subscription status:", err);
 					setSubError("Could not fetch subscription status.");
-					// Keep default view state (false) or handle error differently
 				})
 				.finally(() => {
-					setIsLoadingStatus(false); // Done loading status
+					setIsLoadingStatus(false);
 				});
 		} else {
-			// If user logs out, reset the view state
 			setIsSubscribedView(false);
 			setSubError(null);
 			setSubMessage(null);
 		}
-		// Rerun this effect if the isAuthenticated status changes (user logs in/out)
 	}, [isAuthenticated]);
 
 	const handleNewsletterToggle = async () => {
-		// No need to check isAuthenticated again here, button is only shown if true
-		setIsLoadingToggle(true); // Use separate loading state for the action
+		setIsLoadingToggle(true);
 		setSubError(null);
 		setSubMessage(null);
 
 		try {
-			// Use the local view state to decide which API to call
 			if (isSubscribedView) {
 				await unsubscribeNewsletter();
 				setSubMessage("Successfully unsubscribed!");
-				setIsSubscribedView(false); // Update local view state immediately
+				setIsSubscribedView(false);
 			} else {
 				await subscribeNewsletter();
 				setSubMessage("Successfully subscribed!");
-				setIsSubscribedView(true); // Update local view state immediately
+				setIsSubscribedView(true);
 			}
 		} catch (err) {
 			console.error("Newsletter toggle error:", err);
 			setSubError(getApiErrorMessage(err));
-			// Don't toggle view state if API call failed
 		} finally {
-			setIsLoadingToggle(false); // Action finished
+			setIsLoadingToggle(false);
 		}
 	};
 
-	// Determine overall loading state for the button
 	const isLoading = isLoadingStatus || isLoadingToggle;
 
 	return (
 		<footer className="bg-gray-200 text-gray-600 text-xs border-t border-gray-300 mt-8">
 			<div className="container mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center md:text-left">
-				{/* Column 1: About */}
 				<div>
 					{" "}
 					<h4 className="font-semibold mb-2 text-gray-700">About Tourit</h4>{" "}
@@ -91,7 +79,6 @@ const Footer = () => {
 					</p>{" "}
 				</div>
 
-				{/* Column 2: Actions */}
 				<div>
 					<h4 className="font-semibold mb-2 text-gray-700">Connect</h4>
 					<a
@@ -102,20 +89,19 @@ const Footer = () => {
 						Contact Us{" "}
 					</a>
 
-					{/* Newsletter Toggle - Logic uses isAuthenticated and local view state */}
 					{isAuthenticated && (
 						<div>
 							<button
 								type="button"
 								onClick={handleNewsletterToggle}
-								disabled={isLoading} // Disable if fetching status OR toggling
+								disabled={isLoading}
 								className={`px-3 py-1 rounded-full text-xs font-medium border ${
 									isLoadingStatus
-										? "bg-gray-100 border-gray-300 text-gray-400 cursor-wait" // Special loading style
+										? "bg-gray-100 border-gray-300 text-gray-400 cursor-wait"
 										: isSubscribedView
 											? "bg-red-100 border-red-300 text-red-700 hover:bg-red-200"
 											: "bg-green-100 border-green-300 text-green-700 hover:bg-green-200"
-								} disabled:opacity-70`} // Slightly less faded when disabled due to loading
+								} disabled:opacity-70`}
 							>
 								{isLoadingStatus
 									? "Checking Status..."
@@ -125,7 +111,6 @@ const Footer = () => {
 											? "Unsubscribe Newsletter"
 											: "Subscribe Newsletter"}
 							</button>
-							{/* Only show messages when *not* loading status */}
 							{!isLoadingStatus && subMessage && (
 								<p className="text-green-600 mt-1 text-xs">{subMessage}</p>
 							)}
@@ -139,7 +124,6 @@ const Footer = () => {
 					)}
 				</div>
 
-				{/* Column 3: Copyright */}
 				<div className="md:text-right">
 					{" "}
 					<h4 className="font-semibold mb-2 text-gray-700">Tourit Forum</h4>{" "}

@@ -1,4 +1,3 @@
-// src/components/CommentVoteButtons.jsx
 import React, { useState } from "react";
 import { voteComment, getApiErrorMessage } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
@@ -74,8 +73,6 @@ const CommentVoteButtons = ({ commentId, initialScore }) => {
 					/>
 				</svg>
 			</button>
-			{/* Tiny error display maybe */}
-			{/* {error && <span className="text-red-500 text-xs ml-1">!</span>} */}
 		</div>
 	);
 };

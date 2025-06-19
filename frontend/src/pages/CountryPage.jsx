@@ -1,4 +1,3 @@
-// src/pages/CountryPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getCountryByCode, getPosts, getApiErrorMessage } from '../services/api';
@@ -17,7 +16,7 @@ const CountryDescriptions = [
 ]
 
 const CountryPage = () => {
-    const { countryCode } = useParams(); // Get country code from URL
+    const { countryCode } = useParams(); 
     const [country, setCountry] = useState(null);
     const [posts, setPosts] = useState([]);
     const [isLoadingCountry, setIsLoadingCountry] = useState(true);
@@ -27,7 +26,6 @@ const CountryPage = () => {
     const [sortBy, setSortBy] = useState('top');
     const { isAuthenticated } = useAuth();
 
-    // Fetch Country Details
     const fetchCountryData = useCallback(async () => {
         if (!countryCode) return;
         setIsLoadingCountry(true); setCountryError(null);
@@ -36,18 +34,16 @@ const CountryPage = () => {
             setCountry(response.data);
         } catch (err) {
             setCountryError(getApiErrorMessage(err));
-             setCountry(null); // Ensure country is null on error
+             setCountry(null);
         } finally {
             setIsLoadingCountry(false);
         }
     }, [countryCode]);
 
-    // Fetch Posts for this Country
     const fetchCountryPosts = useCallback(async () => {
-        if (!countryCode) return; // Don't fetch if no code
+        if (!countryCode) return; 
          setIsLoadingPosts(true); setPostsError(null);
          try {
-             // Pass countryCode to getPosts
              const response = await getPosts(sortBy, 25, countryCode);
              setPosts(response.data);
          } catch (err) {
@@ -56,15 +52,13 @@ const CountryPage = () => {
          } finally {
              setIsLoadingPosts(false);
          }
-    }, [countryCode, sortBy]); // Refetch if code or sort changes
+    }, [countryCode, sortBy]); 
 
-    // Initial fetches
     useEffect(() => {
         fetchCountryData();
         fetchCountryPosts();
-    }, [fetchCountryData, fetchCountryPosts]); // Depend on callbacks
+    }, [fetchCountryData, fetchCountryPosts]);
 
-    // --- Render Logic ---
     if (isLoadingCountry) {
         return <p className="text-center text-gray-500 py-10">Loading country info...</p>;
     }
@@ -73,19 +67,14 @@ const CountryPage = () => {
          return <p className="text-center text-red-500 py-10">Error: Country not found or could not be loaded ({countryError || 'Not Found'}).</p>;
     }
 
-    // Main page content
     return (
         <div className="container mx-auto max-w-3xl p-4 pt-6">
-            {/* Country Header */}
             <div className='mb-6 p-4 bg-white rounded border border-gray-300 shadow-sm'>
                  <h1 className="text-2xl font-bold mb-2">{country.name}</h1>
-                 {/* Placeholder for Description/Rules */}
                  <p className="text-sm text-gray-600 italic">
                     {CountryDescriptions.find(desc => desc.countryCode === country.code)?.description || 'No description available.'}
                  </p>
             </div>
-
-             {/* Optional Create Post Link */}
              {isAuthenticated && (
                 <div className="mb-4">
                     <Link to="/create-post" state={{ prefillCountry: country.id }}
@@ -94,8 +83,6 @@ const CountryPage = () => {
                     </Link>
                 </div>
              )}
-
-            {/* Sorting Tabs */}
             <div className="flex border-b border-gray-300 mb-4 bg-white px-2 rounded-t">
                  <button
                      type="button"
@@ -110,8 +97,6 @@ const CountryPage = () => {
                      ✨ New
                  </button>
             </div>
-
-            {/* Post List */}
             {isLoadingPosts && <p className="text-center text-gray-500 py-10">Loading posts...</p>}
             {postsError && <p className="text-center text-red-500 py-10">Error loading posts: {postsError}</p>}
             {!isLoadingPosts && !postsError && posts.length === 0 && (

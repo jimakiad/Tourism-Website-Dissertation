@@ -1,5 +1,4 @@
-﻿// Models/Tag.cs
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 namespace TourismReddit.Api.Models;
 
 public class Tag

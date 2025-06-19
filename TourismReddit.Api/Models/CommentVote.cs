@@ -1,4 +1,3 @@
-// Models/CommentVote.cs
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,15 +8,14 @@ public class CommentVote
     public int Id { get; set; }
 
     [Required]
-    public int UserId { get; set; } // User who voted
+    public int UserId { get; set; } 
 
     [Required]
-    public int CommentId { get; set; } // Comment being voted on
+    public int CommentId { get; set; } 
 
     [Required]
-    public int VoteType { get; set; } // 1 for like, -1 for dislike
+    public int VoteType { get; set; }
 
-    // Navigation Properties
     [ForeignKey("UserId")]
     public virtual User? User { get; set; }
 

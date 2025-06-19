@@ -1,4 +1,3 @@
-// Controllers/CommentsController.cs
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +8,22 @@ using TourismReddit.Api.Dtos;
 
 namespace TourismReddit.Api.Controllers
 {
-    [Route("api")] // Base route for flexibility
+    [Route("api")]
     [ApiController]
     public class CommentsController : ControllerBase
     {
+        private bool TryGetUserId(out int userId)
+        {
+            userId = 0;
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (int.TryParse(userIdString, out var id))
+            {
+                userId = id;
+                return true;
+            }
+            _logger.LogWarning("Could not parse User ID from claims in CommentsController.");
+            return false;
+        }
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CommentsController> _logger;
 
@@ -22,8 +33,6 @@ namespace TourismReddit.Api.Controllers
             _logger = logger;
         }
 
-        // --- GET Comments for a Post ---
-        // GET: /api/posts/{postId}/comments
         [HttpGet("posts/{postId}/comments")]
         [ProducesResponseType(typeof(IEnumerable<CommentDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -38,31 +47,27 @@ namespace TourismReddit.Api.Controllers
                 return NotFound("Post not found.");
             }
 
-            // Fetch all comments for the post, including author and vote info
             var comments = await _context.Comments
+                .Where(c => c.PostId == postId && !c.IsDeleted && c.Author != null && c.Author.IsActive)
                 .Where(c => c.PostId == postId)
                 .Include(c => c.Author)
                 .Include(c => c.CommentVotes)
-                // Include replies recursively? This can get complex.
-                // For simplicity now, we fetch all and reconstruct hierarchy later or fetch level by level.
-                // Let's fetch all and mark ParentCommentId
-                .OrderBy(c => c.CreatedAt) // Order chronologically
+                .Include(c => c.Post)
+                .OrderBy(c => c.CreatedAt)
                 .Select(c => new CommentDto
                 {
                     Id = c.Id,
-                    Body = c.Body,
-                    UserId = c.UserId,
-                    AuthorUsername = c.Author != null ? c.Author.Username : "Unknown",
+                    Body = c.Body ?? "[REMOVED]",
+                    UserId = c.UserId ?? 0,
+                    AuthorUsername = c.Body == "[REMOVED]" ? "[REDACTED]" : (c.Author != null ? c.Author.Username : "Unknown"),
                     PostId = c.PostId,
+                    PostTitle = c.Post != null ? (c.Post.Title ?? "[REMOVED]") : "[REMOVED]",
                     ParentCommentId = c.ParentCommentId,
                     CreatedAt = c.CreatedAt,
                     Score = c.CommentVotes.Any() ? c.CommentVotes.Sum(v => v.VoteType) : 0,
-                    // Replies = new List<CommentDto>() // Initialize empty, hierarchy built later
                 })
                 .ToListAsync();
 
-            // --- Simple Hierarchy Reconstruction (for one level deep for now) ---
-            // In a real app, use a more robust recursive function or fetch differently
             var commentMap = comments.ToDictionary(c => c.Id);
             var rootComments = new List<CommentDto>();
 
@@ -70,23 +75,19 @@ namespace TourismReddit.Api.Controllers
             {
                 if (comment.ParentCommentId.HasValue && commentMap.TryGetValue(comment.ParentCommentId.Value, out var parent))
                 {
-                    parent.Replies.Add(comment); // Add to parent's reply list
+                    parent.Replies.Add(comment);
                 }
                 else
                 {
-                    rootComments.Add(comment); // Add top-level comments
+                    rootComments.Add(comment);
                 }
             }
-            // --- End Simple Hierarchy ---
 
-            return Ok(rootComments); // Return only top-level comments (with nested replies)
+            return Ok(rootComments);
         }
 
-
-        // --- POST a new Comment ---
-        // POST: /api/posts/{postId}/comments
         [HttpPost("posts/{postId}/comments")]
-        [Authorize] // Must be logged in
+        [Authorize]
         [ProducesResponseType(typeof(CommentDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -97,29 +98,23 @@ namespace TourismReddit.Api.Controllers
             _logger.LogInformation("Creating comment for Post ID: {PostId}, ParentCommentId: {ParentId}",
                postId, createCommentDto.ParentCommentId);
 
-            // Get User ID
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdString, out var userId)) return Unauthorized("Invalid user ID.");
 
-            // Check if Post exists
             var postExists = await _context.Posts.AnyAsync(p => p.Id == postId);
             if (!postExists) return NotFound("Post not found.");
 
-            // Optional: Check if Parent Comment exists if ParentCommentId is provided
             if (createCommentDto.ParentCommentId.HasValue)
             {
                 var parentExists = await _context.Comments.AnyAsync(c => c.Id == createCommentDto.ParentCommentId.Value && c.PostId == postId);
                 if (!parentExists) return BadRequest("Parent comment not found or does not belong to this post.");
             }
 
-            // --- Sanitize Comment Body Here ---
-            // string sanitizedBody = SanitizeMarkdown(createCommentDto.Body);
-            string unsafeBody = createCommentDto.Body; // Needs sanitization!
-            // --- End Sanitization ---
+            string unsafeBody = createCommentDto.Body;
 
             var comment = new Comment
             {
-                Body = unsafeBody, // Use sanitized body
+                Body = unsafeBody,
                 PostId = postId,
                 UserId = userId,
                 ParentCommentId = createCommentDto.ParentCommentId,
@@ -129,36 +124,63 @@ namespace TourismReddit.Api.Controllers
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            // Load Author for the response DTO
             await _context.Entry(comment).Reference(c => c.Author).LoadAsync();
 
             var commentDto = new CommentDto
             {
                 Id = comment.Id,
                 Body = comment.Body,
-                UserId = comment.UserId,
+                UserId = comment.UserId ?? 0,
                 AuthorUsername = comment.Author?.Username ?? "Unknown",
                 PostId = comment.PostId,
                 ParentCommentId = comment.ParentCommentId,
                 CreatedAt = comment.CreatedAt,
-                Score = 0, // New comment
-                Replies = new List<CommentDto>() // No replies yet
+                Score = 0,
+                Replies = new List<CommentDto>()
             };
 
-            // Consider how to return this - maybe just Ok(commentDto) is simpler than CreatedAtAction
-            return Created($"/api/posts/{postId}/comments/{comment.Id}", commentDto); // Needs a GetCommentById endpoint
-                                                                                      // return Ok(commentDto); // Simpler alternative
+            return Created($"/api/posts/{postId}/comments/{comment.Id}", commentDto);
         }
 
+        [HttpDelete("/api/comments/{commentId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> DeleteComment(int commentId)
+        {
+            if (!TryGetUserId(out var userId)) return Unauthorized();
 
-        // --- POST Vote on a Comment ---
-        // POST: /api/comments/{commentId}/vote
+            _logger.LogWarning("[REDACTION] Attempting redaction of Comment ID: {CommentId} by User ID: {UserId}", commentId, userId);
+
+            var comment = await _context.Comments.FindAsync(commentId);
+
+            if (comment == null) return NotFound("Comment not found.");
+
+            if (comment.UserId != userId)
+            {
+                _logger.LogWarning("[REDACTION] User {UserId} forbidden to redact Comment ID: {CommentId} owned by User ID: {OwnerId}", userId, commentId, comment.UserId);
+                return Forbid();
+            }
+
+            // comment.IsDeleted = true;
+            comment.Body = "[REMOVED]";
+            // Do not set comment.UserId = null; UserId is required by the database
+
+            _context.Comments.Update(comment);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("[REDACTION] Successfully redacted Comment ID: {CommentId}", commentId);
+            return NoContent();
+        }
+
         [HttpPost("comments/{commentId}/vote")]
         [Authorize]
-        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)] // Returns { score: newScore }
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> VoteComment(int commentId, VoteDto voteDto) // Reuse VoteDto from Posts
+        public async Task<IActionResult> VoteComment(int commentId, VoteDto voteDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -167,23 +189,22 @@ namespace TourismReddit.Api.Controllers
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdString, out var userId)) return Unauthorized("Invalid user ID.");
 
-            // Find existing vote by this user for this comment
             var existingVote = await _context.CommentVotes
                 .FirstOrDefaultAsync(cv => cv.CommentId == commentId && cv.UserId == userId);
 
-            if (existingVote != null) // Vote exists
+            if (existingVote != null)
             {
                 if (existingVote.VoteType == voteDto.Direction)
                 {
-                    _context.CommentVotes.Remove(existingVote); // Unvote
+                    _context.CommentVotes.Remove(existingVote);
                 }
                 else
                 {
-                    existingVote.VoteType = voteDto.Direction; // Change vote
+                    existingVote.VoteType = voteDto.Direction;
                     _context.CommentVotes.Update(existingVote);
                 }
             }
-            else // No existing vote
+            else
             {
                 var commentExists = await _context.Comments.AnyAsync(c => c.Id == commentId);
                 if (!commentExists) return NotFound("Comment not found.");
@@ -199,16 +220,11 @@ namespace TourismReddit.Api.Controllers
 
             await _context.SaveChangesAsync();
 
-            // Recalculate score
             var newScore = await _context.CommentVotes
                             .Where(cv => cv.CommentId == commentId)
                             .SumAsync(cv => (int?)cv.VoteType) ?? 0;
 
             return Ok(new { score = newScore });
         }
-
-        // Add GET /api/comments/{id} if needed for CreatedAtAction route or direct fetching
-        // Add PUT /api/comments/{id} for editing
-        // Add DELETE /api/comments/{id} for deleting
     }
 }

@@ -24,12 +24,11 @@ apiClient.interceptors.request.use(
 		return config;
 	},
 	(error) => {
-		// If there's an error setting up the request, reject the promise.
+
 		return Promise.reject(error);
 	},
 );
 
-// --- Define functions for specific API endpoints ---
 
 export const login = (credentials) =>
 	apiClient.post("/auth/login", credentials);
@@ -38,14 +37,25 @@ export const register = (userData) =>
 	apiClient.post("/auth/register", userData);
 
 export const getPosts = (sortBy = "new", limit = 25, countryCode = null) => {
-	let url = `/posts?sortBy=${sortBy}&limit=${limit}`; // Check casing /posts or /Posts
+	let url = `/posts?sortBy=${sortBy}&limit=${limit}`; 
 	if (countryCode) {
-		url += `&countryCode=${encodeURIComponent(countryCode)}`; // Add countryCode if provided
+		url += `&countryCode=${encodeURIComponent(countryCode)}`; 
 	}
 	return apiClient.get(url);
 };
+export const deletePost = (postId) => apiClient.delete(`/posts/${postId}`);
+export const getCurrentUserProfile = () => apiClient.get("/users/me");
+export const getCurrentUserPosts = (sortBy = "new", limit = 50) =>
+	apiClient.get(`/users/me/posts?sortBy=${sortBy}&limit=${limit}`);
+export const getCurrentUserComments = (sortBy = 'new', limit = 50) => apiClient.get(`/users/me/comments?sortBy=${sortBy}&limit=${limit}`);
+export const deleteCurrentUserAccount = () => apiClient.delete('/users/me'); 
 
-export const getCountryByCode = (code) => apiClient.get(`/countries/code/${code}`);
+export const deleteComment = (commentId) =>
+	apiClient.delete(`/comments/${commentId}`);
+;
+
+export const getCountryByCode = (code) =>
+	apiClient.get(`/countries/code/${code}`);
 
 export const getPostById = (postId) => apiClient.get(`/posts/${postId}`);
 
@@ -83,10 +93,9 @@ export const uploadPostImage = (postId, formData) => {
 	});
 };
 
-// Simple Error Message Extractor
 
 export const getApiErrorMessage = (error) => {
-	// Check if the error object has response data from the backend
+
 	if (error?.response?.data) {
 		if (error.response.data.errors) {
 			const messages = Object.values(error.response.data.errors).flat();

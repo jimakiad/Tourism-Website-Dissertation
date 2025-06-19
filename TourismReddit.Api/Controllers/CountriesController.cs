@@ -12,7 +12,7 @@ namespace TourismReddit.Api.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CountriesController> _logger;
 
-        public CountriesController(ApplicationDbContext context, ILogger<CountriesController> logger) // Inject logger
+        public CountriesController(ApplicationDbContext context, ILogger<CountriesController> logger)
         {
             _context = context;
             _logger = logger;
@@ -41,7 +41,6 @@ namespace TourismReddit.Api.Controllers
 
             _logger.LogInformation("Getting country by code: {Code}", code);
 
-            // Find country by code (case-insensitive)
             var country = await _context.Countries
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync(c => c.Code.ToLower() == code.ToLower());
@@ -52,8 +51,6 @@ namespace TourismReddit.Api.Controllers
                 return NotFound("Country not found.");
             }
 
-            // Return the whole Country object for now (including ID, Name, Code)
-            // Later, you might add Description/Rules here
             return Ok(country);
         }
     }

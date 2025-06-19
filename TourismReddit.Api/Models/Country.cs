@@ -1,7 +1,6 @@
-// Filename: Models/Country.cs
 using System.ComponentModel.DataAnnotations;
 
-namespace TourismReddit.Api.Models // Ensure namespace matches
+namespace TourismReddit.Api.Models 
 {
     public class Country
     {
@@ -10,6 +9,6 @@ namespace TourismReddit.Api.Models // Ensure namespace matches
         [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
         [MaxLength(3)]
-        public string Code { get; set; } = string.Empty; // e.g., USA, CAN
+        public string Code { get; set; } = string.Empty; 
     }
 }

@@ -5,7 +5,7 @@ import App from './App.jsx';
 import './index.css'; // Imports global CSS including Tailwind directives
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode> {/* Helps catch potential problems */}
+  <React.StrictMode> 
     <App />
   </React.StrictMode>,
 );

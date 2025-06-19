@@ -1,35 +1,40 @@
-// Controllers/PostsController.cs
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using TourismReddit.Api.Data;
 using TourismReddit.Api.Models;
 using TourismReddit.Api.Dtos;
-using Microsoft.AspNetCore.Http; // Required for IFormFile
-using System.IO; // Required for Path
-using Microsoft.Extensions.Hosting; // Required for IWebHostEnvironment (use this instead of IHostingEnvironment in .NET Core 3+)
 
 namespace TourismReddit.Api.Controllers
 {
-    [Route("api/[controller]")] // Using [controller] token is conventional
+    [Route("api/[controller]")]
     [ApiController]
     public class PostsController : ControllerBase
     {
+        private bool TryGetUserId(out int userId)
+        {
+            userId = 0;
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (int.TryParse(userIdString, out var id))
+            {
+                userId = id;
+                return true;
+            }
+            _logger.LogWarning("Could not parse User ID from claims in CommentsController.");
+            return false;
+        }
         private readonly ApplicationDbContext _context;
         private readonly ILogger<PostsController> _logger;
-        private readonly IWebHostEnvironment _environment; // Use IWebHostEnvironment
+        private readonly IWebHostEnvironment _environment;
 
-        public PostsController(ApplicationDbContext context, ILogger<PostsController> logger, IWebHostEnvironment environment) // Inject IWebHostEnvironment
+        public PostsController(ApplicationDbContext context, ILogger<PostsController> logger, IWebHostEnvironment environment)
         {
             _context = context;
             _logger = logger;
             _environment = environment;
         }
 
-        // GET: /api/posts
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<PostDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPosts(
@@ -39,55 +44,47 @@ namespace TourismReddit.Api.Controllers
         {
             _logger.LogInformation("Getting posts: sortBy={SortBy}, limit={Limit}, countryCode={CountryCode}", sortBy, limit, countryCode);
 
-            // Start base query
             var query = _context.Posts.AsNoTracking();
 
-            // Apply includes using separate statements for clarity and type safety
             query = query
+                .Where(p => !p.IsDeleted && p.Author != null && p.Author.IsActive)
                 .Include(p => p.Author)
                 .Include(p => p.Country)
                 .Include(p => p.Votes)
                 .Include(p => p.PostCategories)
                     .ThenInclude(pc => pc.Category);
 
-            // Chain the next include from the result of the previous one
             query = query
                 .Include(p => p.PostTags)
                     .ThenInclude(pt => pt.Tag);
 
-            // Apply Country Filter
             if (!string.IsNullOrEmpty(countryCode))
             {
-                // Ensure case-insensitive comparison if needed by DB collation
                 query = query.Where(p => p.Country != null && p.Country.Code.ToLower() == countryCode.ToLower());
             }
 
-            // Apply Sorting
-            IQueryable<Post> orderedQuery; // Use IQueryable here
+            IQueryable<Post> orderedQuery;
             if (sortBy.ToLower() == "top")
             {
-                // Order by score (sum of votes)
-                 orderedQuery = query.OrderByDescending(p => p.Votes.Sum(v => (int?)v.VoteType ?? 0)) // Handle potential null sum or no votes
-                                     .ThenByDescending(p => p.CreatedAt);
+                orderedQuery = query.OrderByDescending(p => p.Votes.Sum(v => (int?)v.VoteType ?? 0))
+                                    .ThenByDescending(p => p.CreatedAt);
             }
-            else // Default to 'new'
+            else
             {
                 orderedQuery = query.OrderByDescending(p => p.CreatedAt);
             }
 
-            // Apply Limit and Project to DTO
-            var posts = await orderedQuery // Use the ordered query
+            var posts = await orderedQuery
                 .Take(limit)
                 .Select(p => new PostDto
                 {
                     Id = p.Id,
                     Title = p.Title,
-                    // Body = p.Body, // Optionally omit for list view
                     AuthorUsername = p.Author != null ? p.Author.Username : "Unknown",
                     CountryName = p.Country != null ? p.Country.Name : "Unknown",
                     CountryCode = p.Country != null ? p.Country.Code : null,
                     CreatedAt = p.CreatedAt,
-                    Score = p.Votes.Any() ? p.Votes.Sum(v => v.VoteType) : 0, // Calculate score in projection
+                    Score = p.Votes.Any() ? p.Votes.Sum(v => v.VoteType) : 0,
                     CategoryNames = p.PostCategories.Select(pc => pc.Category.Name).ToList(),
                     TagNames = p.PostTags.Select(pt => pt.Tag.Name).ToList(),
                     Latitude = p.Latitude,
@@ -99,7 +96,6 @@ namespace TourismReddit.Api.Controllers
             return Ok(posts);
         }
 
-        // GET: /api/posts/{id}
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(PostDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -107,10 +103,8 @@ namespace TourismReddit.Api.Controllers
         {
             _logger.LogInformation("Getting post by ID: {PostId}", id);
 
-            // Fetch the single post with all necessary related data
-            // No need to include Comments here if fetched separately by frontend
             var post = await _context.Posts
-               .AsNoTracking() // Good for read-only scenarios
+               .AsNoTracking()
                .Include(p => p.Author)
                .Include(p => p.Country)
                .Include(p => p.Votes)
@@ -125,12 +119,11 @@ namespace TourismReddit.Api.Controllers
                 return NotFound();
             }
 
-            // Map the retrieved entity to the DTO
             var postDto = new PostDto
             {
                 Id = post.Id,
                 Title = post.Title,
-                Body = post.Body, // Include full body for detail view
+                Body = (post.Body is null) ? "No content" : post.Body,
                 AuthorUsername = post.Author?.Username ?? "Unknown",
                 CountryName = post.Country?.Name ?? "Unknown",
                 CountryCode = post.Country?.Code,
@@ -146,52 +139,43 @@ namespace TourismReddit.Api.Controllers
             return Ok(postDto);
         }
 
-
-        // POST: /api/posts
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(PostDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)] // Added for country check
-        public async Task<IActionResult> CreatePost([FromBody] CreatePostDto createPostDto) // Added [FromBody]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CreatePost([FromBody] CreatePostDto createPostDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             _logger.LogInformation("Creating post titled: {Title}", createPostDto.Title);
 
-            // --- Consider Sanitization for Body ---
-            string postBody = createPostDto.Body; // Replace with sanitized version later
-            // ---
+            string postBody = createPostDto.Body;
 
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdString, out var userId)) return Unauthorized("Invalid user ID.");
 
-            // Verify country exists
             var countryExists = await _context.Countries.AnyAsync(c => c.Id == createPostDto.CountryId);
             if (!countryExists)
             {
-                 ModelState.AddModelError(nameof(createPostDto.CountryId), "Selected country does not exist.");
-                 return BadRequest(ModelState);
+                ModelState.AddModelError(nameof(createPostDto.CountryId), "Selected country does not exist.");
+                return BadRequest(ModelState);
             }
 
-            // Create the main Post entity
             var post = new Post
             {
                 Title = createPostDto.Title,
-                Body = postBody, // Use sanitized body
+                Body = postBody,
                 CountryId = createPostDto.CountryId,
                 UserId = userId,
                 CreatedAt = DateTime.UtcNow,
                 Latitude = createPostDto.Latitude,
                 Longitude = createPostDto.Longitude,
-                // ImageUrl is set after upload
             };
 
-            // Add selected Categories
             if (createPostDto.CategoryIds?.Any() == true)
             {
-                // Verify IDs exist to prevent errors (optional but recommended)
                 var validCategoryIds = await _context.Categories
                     .Where(c => createPostDto.CategoryIds.Contains(c.Id))
                     .Select(c => c.Id)
@@ -200,16 +184,14 @@ namespace TourismReddit.Api.Controllers
                 {
                     post.PostCategories.Add(new PostCategory { CategoryId = catId });
                 }
-                 // Optional: Check if any requested IDs were invalid and report back?
             }
 
-            // Add selected Tags
             if (createPostDto.TagIds?.Any() == true)
             {
-                 var validTagIds = await _context.Tags
-                    .Where(t => createPostDto.TagIds.Contains(t.Id))
-                    .Select(t => t.Id)
-                    .ToListAsync();
+                var validTagIds = await _context.Tags
+                   .Where(t => createPostDto.TagIds.Contains(t.Id))
+                   .Select(t => t.Id)
+                   .ToListAsync();
                 foreach (var tagId in validTagIds)
                 {
                     post.PostTags.Add(new PostTag { TagId = tagId });
@@ -217,18 +199,13 @@ namespace TourismReddit.Api.Controllers
             }
 
             _context.Posts.Add(post);
-            await _context.SaveChangesAsync(); // Save post FIRST to get its ID
+            await _context.SaveChangesAsync();
 
-            // --- Load related data necessary for the response DTO ---
-            // Use context tracking or reload manually if needed
             await _context.Entry(post).Reference(p => p.Author).LoadAsync();
             await _context.Entry(post).Reference(p => p.Country).LoadAsync();
-            // Reload collections to get Category/Tag names if not implicitly loaded
             await _context.Entry(post).Collection(p => p.PostCategories).Query().Include(pc => pc.Category).LoadAsync();
             await _context.Entry(post).Collection(p => p.PostTags).Query().Include(pt => pt.Tag).LoadAsync();
-            // ---
 
-            // Map to DTO for the response
             var postDto = new PostDto
             {
                 Id = post.Id,
@@ -238,23 +215,20 @@ namespace TourismReddit.Api.Controllers
                 CountryName = post.Country?.Name ?? "Unknown",
                 CountryCode = post.Country?.Code,
                 CreatedAt = post.CreatedAt,
-                Score = 0, // New post has 0 score
+                Score = 0,
                 CategoryNames = post.PostCategories.Select(pc => pc.Category.Name).ToList(),
                 TagNames = post.PostTags.Select(pt => pt.Tag.Name).ToList(),
                 Latitude = post.Latitude,
                 Longitude = post.Longitude,
-                ImageUrl = post.ImageUrl // Will be null initially
+                ImageUrl = post.ImageUrl
             };
 
-            // Return 201 Created with the location of the new resource and the resource itself
             return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, postDto);
         }
 
-
-        // POST: /api/posts/{postId}/vote
         [HttpPost("{postId}/vote")]
         [Authorize]
-        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)] // Returns { score: newScore }
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -279,7 +253,7 @@ namespace TourismReddit.Api.Controllers
                 }
                 else
                 {
-                     _logger.LogInformation("User {UserId} changing vote on Post ID: {PostId} to {Direction}", userId, postId, voteDto.Direction);
+                    _logger.LogInformation("User {UserId} changing vote on Post ID: {PostId} to {Direction}", userId, postId, voteDto.Direction);
                     existingVote.VoteType = voteDto.Direction;
                     _context.Votes.Update(existingVote);
                 }
@@ -305,11 +279,51 @@ namespace TourismReddit.Api.Controllers
             return Ok(new { score = newScore });
         }
 
+        [HttpDelete("{postId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> DeletePost(int postId)
+        {
+            if (!TryGetUserId(out var userId)) return Unauthorized();
 
-        // POST: /api/posts/{postId}/image
+            _logger.LogWarning("[REDACTION] Attempting redaction of Post ID: {PostId} by User ID: {UserId}", postId, userId);
+
+            var post = await _context.Posts
+                .Include(p => p.PostCategories)
+                .Include(p => p.PostTags)
+                .FirstOrDefaultAsync(p => p.Id == postId);
+
+            if (post == null) return NotFound("Post not found.");
+
+            if (post.UserId != userId)
+            {
+                _logger.LogWarning("[REDACTION] User {UserId} forbidden to redact Post ID: {PostId} owned by User ID: {OwnerId}", userId, postId, post.UserId);
+                return Forbid();
+            }
+
+            post.IsDeleted = true;
+            post.Body = "[REMOVED]";
+            post.UserId = null;
+            post.ImageUrl = null;
+            post.Latitude = null;
+            post.Longitude = null;
+
+            post.PostCategories.Clear();
+            post.PostTags.Clear();
+
+            _context.Posts.Update(post);
+
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("[REDACTION] Successfully redacted Post ID: {PostId}", postId);
+            return NoContent();
+        }
         [HttpPost("{postId}/image")]
         [Authorize]
-        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)] // Returns { imageUrl: "path" }
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -317,15 +331,12 @@ namespace TourismReddit.Api.Controllers
         {
             _logger.LogInformation("Attempting image upload for Post ID: {PostId}", postId);
 
-            // --- Input Validation ---
             if (imageFile == null || imageFile.Length == 0) return BadRequest("No image file provided.");
-            if (imageFile.Length > 5 * 1024 * 1024) return BadRequest("Image file size exceeds the limit (e.g., 5MB)."); // Example limit
+            if (imageFile.Length > 5 * 1024 * 1024) return BadRequest("Image file size exceeds the limit (e.g., 5MB).");
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
             var extension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
             if (string.IsNullOrEmpty(extension) || !allowedExtensions.Contains(extension)) return BadRequest("Invalid image file type. Allowed: JPG, PNG, WEBP.");
-            // --- End Validation ---
 
-            // Find Post and Verify Ownership
             var post = await _context.Posts.FindAsync(postId);
             if (post == null) return NotFound("Post not found.");
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -333,15 +344,12 @@ namespace TourismReddit.Api.Controllers
 
             try
             {
-                // Define Paths
                 var uploadsFolderName = "uploads";
                 var postImagesFolderName = $"post_{postId}";
-                // Use ContentRootPath for saving backend files
                 var uploadsFolderPath = Path.Combine(_environment.ContentRootPath, uploadsFolderName);
                 var postImagesFolderPath = Path.Combine(uploadsFolderPath, postImagesFolderName);
-                Directory.CreateDirectory(postImagesFolderPath); // Ensure directory exists
+                Directory.CreateDirectory(postImagesFolderPath);
 
-                // Save File
                 var uniqueFileName = $"{Guid.NewGuid()}{extension}";
                 var filePath = Path.Combine(postImagesFolderPath, uniqueFileName);
                 _logger.LogInformation("Saving image for Post ID {PostId} to {FilePath}", postId, filePath);
@@ -350,15 +358,13 @@ namespace TourismReddit.Api.Controllers
                     await imageFile.CopyToAsync(stream);
                 }
 
-                // Update Database with Relative URL Path (matches static file config)
-                // IMPORTANT: Ensure this path structure matches UseStaticFiles RequestPath
                 var relativeImagePath = $"/{uploadsFolderName}/{postImagesFolderName}/{uniqueFileName}".Replace("\\", "/");
                 post.ImageUrl = relativeImagePath;
                 _context.Posts.Update(post);
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("Successfully saved image for Post ID {PostId}. DB Path: {ImageUrl}", postId, relativeImagePath);
-                return Ok(new { imageUrl = relativeImagePath }); // Return the relative path
+                return Ok(new { imageUrl = relativeImagePath });
 
             }
             catch (Exception ex)
