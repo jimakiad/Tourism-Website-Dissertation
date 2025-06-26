@@ -1,5 +1,0 @@
-Social Media Tourism: 
-Reviews (Markdown Integration)
-Newsletter
-Maps API [List of countries (With Markers)]
-PostgreSQL
